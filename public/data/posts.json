@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "title": "Sunset Cityscape",
+    "image": "/images/demo/sunset.jpg",
+    "author": "rina",
+    "avatar": "/images/demo/rina.jpg",
+    "likes": 128,
+    "tags": ["fotografi","city","sunset"],
+    "desc": "Eksperimen long exposure di atap gedung.",
+    "date": "2025-07-14"
+  },
+  {
+    "id": 2,
+    "title": "UI HUD Game Sci‑Fi",
+    "image": "/images/demo/hud.jpg",
+    "author": "dimas",
+    "avatar": "/images/demo/dimas.jpg",
+    "likes": 96,
+    "tags": ["gaming","ui","concept"],
+    "desc": "Mockup HUD untuk game shooter.",
+    "date": "2025-07-10"
+  },
+  {
+    "id": 3,
+    "title": "Character Sketch – Ranger",
+    "image": "/images/demo/ranger.jpg",
+    "author": "salsa",
+    "avatar": "/images/demo/salsa.jpg",
+    "likes": 74,
+    "tags": ["ilustrasi","sketch","fantasy"],
+    "desc": "Latihan anatomi dan tekstur kain.",
+    "date": "2025-07-18"
+  },
+  {
+    "id": 4,
+    "title": "Lo‑fi Cover – Night Walk",
+    "image": "/images/demo/lofi.jpg",
+    "author": "bima",
+    "avatar": "/images/demo/bima.jpg",
+    "likes": 52,
+    "tags": ["musik","lofi","cover"],
+    "desc": "Cover santai dengan gitar + drum machine.",
+    "date": "2025-07-20"
+  },
+  {
+    "id": 5,
+    "title": "Milky Way Over Hills",
+    "image": "/images/demo/milkyway.jpg",
+    "author": "rina",
+    "avatar": "/images/demo/rina.jpg",
+    "likes": 143,
+    "tags": ["fotografi","astro","night"],
+    "desc": "Stacking 12 foto, ISO 3200, 20s.",
+    "date": "2025-08-01"
+  },
+  {
+    "id": 6,
+    "title": "Game Landing – Neon Store",
+    "image": "/images/demo/neonstore.jpg",
+    "author": "dimas",
+    "avatar": "/images/demo/dimas.jpg",
+    "likes": 88,
+    "tags": ["ui","ux","landing"],
+    "desc": "Eksplorasi landing page untuk in‑game shop.",
+    "date": "2025-08-05"
+  },
+  {
+    "id": 7,
+    "title": "Cinematic B‑roll – Market",
+    "image": "/images/demo/broll.jpg",
+    "author": "ayu",
+    "avatar": "/images/demo/ayu.jpg",
+    "likes": 61,
+    "tags": ["video","cinematic","market"],
+    "desc": "Shot di pasar pagi, color grade teal‑orange.",
+    "date": "2025-08-09"
+  }
+]
