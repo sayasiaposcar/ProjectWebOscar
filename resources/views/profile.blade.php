@@ -49,7 +49,13 @@
           </div>
           <div class="ml-auto flex items-center gap-2">
             <button type="button" class="px-3 py-1.5 rounded-xl btn-accent-ghost" @click="shareProfile()">Bagikan</button>
-            <!-- Follow: disembunyikan saat self -->
+
+            <!-- EDIT: hanya untuk diri sendiri -->
+            <template x-if="isSelf">
+              <button type="button" class="px-3 py-1.5 rounded-xl btn-accent text-white" @click="openEdit()">Edit Profil</button>
+            </template>
+
+            <!-- Follow: sembunyikan saat self -->
             <template x-if="user && !isSelf">
               <button type="button" class="px-3 py-1.5 rounded-xl btn-accent text-white" @click="toggleFollowUser(user.username)">
                 <span x-text="isFollowingUser(user.username)?'Mengikuti':'Ikuti'"></span>
@@ -189,7 +195,7 @@
     </div>
     <div class="max-h-[44vh] overflow-auto divide-y divide-white/5">
       <template x-for="t in dm.filtered()" :key="t.id">
-        <a href="/messages" class="block px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5">
+        <a href="/messages" class="block px-4 py-3 hover:bg-black/5 dark:hover:bg:white/5">
           <div class="flex items-center gap-3">
             <img :src="dmAvatar(t)" class="w-9 h-9 rounded-full object-cover" alt="">
             <div class="min-w-0">
@@ -237,6 +243,47 @@
       </div>
     </div>
   </aside>
+
+  <!-- ======= EDIT PROFILE MODAL (LOCAL) ======= -->
+  <div x-show="editOpen" x-cloak class="fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" @click="closeEdit()"></div>
+    <div class="relative w-full max-w-lg glass rounded-2xl p-4">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="font-semibold">Edit Profil</div>
+        <button class="ml-auto px-2 py-1 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" @click="closeEdit()">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <!-- Foto profil -->
+        <div class="flex items-center gap-3">
+          <img :src="form.avatar || user?.avatar || '/images/demo/rina.jpg'" class="w-16 h-16 rounded-xl object-cover border" alt="avatar preview">
+          <div>
+            <div class="text-sm font-medium mb-1">Ganti Foto Profil</div>
+            <input type="file" accept="image/*" @change="onAvatarFileModal" class="text-sm">
+          </div>
+        </div>
+
+        <!-- Nama -->
+        <label class="block text-sm">Nama
+          <input x-model.trim="form.name" class="mt-1 w-full rounded-xl px-3 py-2 border">
+        </label>
+
+        <!-- Bio -->
+        <label class="block text-sm">Bio
+          <textarea x-model.trim="form.bio" class="mt-1 w-full rounded-xl px-3 py-2 border min-h-24"></textarea>
+        </label>
+
+        <div class="flex items-center gap-2 pt-1">
+          <button class="px-4 py-2 rounded-xl btn-accent text-white" @click="saveEdit()" :disabled="savingEdit">
+            <span x-text="savingEdit ? 'Menyimpan…' : 'Simpan'"></span>
+          </button>
+          <button class="px-4 py-2 rounded-xl btn-accent-ghost" @click="closeEdit()" :disabled="savingEdit">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ======= /EDIT PROFILE MODAL ======= -->
+
 </section>
 @endsection
 
@@ -258,6 +305,11 @@ function ProfilePage(){
     followUsers:new Set(LS.get('hs-follow-users',[])),
     me:(window.CURRENT_USER && window.CURRENT_USER.username) || 'rina',
     get isSelf(){ return this.user && this.user.username===this.me },
+
+    // === Edit Profile (local only) ===
+    editOpen:false,
+    savingEdit:false,
+    form:{ name:'', bio:'', avatar:'' },
 
     // mini DM list
     dm:{ threads:[], q:'', showArchived:false,
@@ -338,19 +390,65 @@ function ProfilePage(){
     dmName(t){ const other=this.dmOther(t); return this.dmUser(other).name },
     dmAvatar(t){ const other=this.dmOther(t); return this.dmUser(other).avatar || DEFAULT_AV },
 
-    // Upload avatar: simpan GLOBAL (UserMeta) + update lokal langsung
+    // Upload avatar langsung dari kartu kiri
     async onAvatarFile(e){
       const f=e.target.files?.[0]; e.target.value='';
       if(!f || !this.isSelf) return;
       try{
         const dataUrl = await toDataUrl(f);
-        // simpan global (efek ke seluruh app)
         window.UserMeta?.upsert(this.user.username, { avatar: dataUrl });
-        // update tampilan lokal langsung
         this.user = {...this.user, avatar: dataUrl};
-        // update avatar di header (layout menangkap event 'user:meta-updated' juga)
         window.toast?.('Avatar diperbarui');
       }catch{ window.toast?.('Gagal memuat gambar') }
+    },
+
+    // ===== Edit modal logic =====
+    openEdit(){
+      if(!this.isSelf || !this.user) return;
+      this.form = {
+        name: this.user.name || '',
+        bio: this.user.bio || '',
+        avatar: this.user.avatar || ''
+      };
+      this.editOpen = true;
+    },
+    closeEdit(){ this.editOpen=false; },
+
+    async onAvatarFileModal(e){
+      const f = e.target.files?.[0]; e.target.value='';
+      if(!f) return;
+      try{
+        const dataUrl = await toDataUrl(f);
+        this.form.avatar = dataUrl;
+      }catch{ window.toast?.('Gagal memuat foto profil'); }
+    },
+
+    saveEdit(){
+      if(!this.isSelf || !this.user || this.savingEdit) return;
+      this.savingEdit = true;
+
+      const patch = {
+        name: (this.form.name||'').trim(),
+        bio: (this.form.bio||'').trim(),
+        avatar: this.form.avatar || this.user.avatar || ''
+      };
+
+      try{
+        if(window.UserMeta?.upsert){
+          window.UserMeta.upsert(this.user.username, patch);
+        }else{
+          let map={}; try{ map=JSON.parse(localStorage.getItem('hs-user-overrides')||'{}'); }catch{}
+          map[this.user.username] = { ...(map[this.user.username]||{}), ...patch };
+          localStorage.setItem('hs-user-overrides', JSON.stringify(map));
+          window.dispatchEvent(new Event('user:meta-updated'));
+        }
+
+        this.user = { ...this.user, ...patch };
+        window.toast?.('Profil diperbarui');
+        this.editOpen = false;
+      }finally{
+        this.savingEdit = false;
+      }
     }
   }
 }
