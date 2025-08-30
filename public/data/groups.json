@@ -1,0 +1,35 @@
+[
+  {
+   "id": 1,
+    "slug": "fotografi-kreatif",
+    "name": "Fotografi Kreatif",
+    "desc": "Tempat berbagi karya foto & tips kamera.",
+    "avatar": "/images/demo/desain.jpeg",
+    "cover": "/images/demo/desain.jpeg",   
+    "owner": "Rina Putri",
+    "handle": "rina",
+    "tags": ["fotografi"],
+    "created_at": "2024-07-01",
+    "members": 128
+  },
+  {
+    "id": 2,
+    "name": "Gaming Seru",
+    "slug" : "gaming-seru",
+    "desc": "Ngobrol game terbaru dan mabar bareng.",
+    "avatar": "/images/demo/gaming.jpeg",
+    "tag": ["gaming"],
+    "created_at": "2024-05-20",
+    "members": 342
+  },
+  {
+    "id": 3,
+    "name": "Desain Grafis",
+    "slug" : "desain-grafis",
+    "desc": "Diskusi software desain & share portofolio.",
+    "avatar": "/images/demo/desain.jpeg",
+    "tag": ["desain"],
+    "created_at": "2024-06-10",
+    "members": 215
+  }
+]

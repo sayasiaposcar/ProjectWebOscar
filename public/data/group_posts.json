@@ -1,0 +1,35 @@
+[
+  {
+    "id": "p-001",
+    "group": "fotografi-kreatif",
+    "title": "Milky Way Over Hills",
+    "image": "/images/demo/sunset1.jpeg",
+    "author": "rina",
+    "avatar": "/images/demo/rina.jpg",
+    "tags": ["fotografi","astro","night"],
+    "date": "2024-08-01",
+    "likes": 144
+  },
+  {
+    "id": "p-002",
+    "group": "fotografi-kreatif",
+    "title": "Sunset Cityscape",
+    "image": "/images/demo/sunset2.jpeg",
+    "author": "dimas",
+    "avatar": "/images/demo/dimas.jpg",
+    "tags": ["fotografi","city","sunset"],
+    "date": "2024-07-14",
+    "likes": 128
+  },
+  {
+    "id": "p-101",
+    "group": "gaming-seru",
+    "title": "UI HUD Game Sci-Fi",
+    "image": "/images/demo/posts/ui-hud.jpg",
+    "author": "bima",
+    "avatar": "/images/demo/bima.jpg",
+    "tags": ["gaming","ui","concept"],
+    "date": "2024-07-10",
+    "likes": 96
+  }
+]
